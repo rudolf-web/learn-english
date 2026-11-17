@@ -1639,7 +1639,7 @@ export default function App() {
       <header className="sticky top-0 bg-[#EBE7DC]/95 backdrop-blur-md border-b border-[#D1CCBD] z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 cursor-pointer" title="Kembali ke Beranda" onClick={() => { setActiveTab("dashboard"); setIsQuizMode(false); setSelectedLevelExam(null); }}>
             <div className="w-11 h-11 bg-[#5A5A40] rounded-xl flex items-center justify-center text-white font-bold select-none font-serif text-xl border border-[#494933]">
               E
             </div>
@@ -1686,7 +1686,7 @@ export default function App() {
         <div className="flex bg-[#EBE7DC] p-1 rounded-2xl border border-[#D1CCBD] shadow-sm max-w-5xl mx-auto mb-8 overflow-x-auto whitespace-nowrap font-sans text-xs sm:text-sm">
           
           <button
-            onClick={() => { setActiveTab("dashboard"); setIsQuizMode(false); }}
+            onClick={() => { setActiveTab("dashboard"); setIsQuizMode(false); setSelectedLevelExam(null); }}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold transition-all cursor-pointer ${
               activeTab === "dashboard" ? "bg-[#5A5A40] text-white shadow" : "text-[#8A8471] hover:text-[#3D3A33] hover:bg-[#F1EEE6]"
             }`}
@@ -1696,7 +1696,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => { setActiveTab("modules"); setIsQuizMode(false); }}
+            onClick={() => { setActiveTab("modules"); setIsQuizMode(false); setSelectedLevelExam(null); }}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold transition-all cursor-pointer ${
               activeTab === "modules" ? "bg-[#5A5A40] text-white shadow" : "text-[#8A8471] hover:text-[#3D3A33] hover:bg-[#F1EEE6]"
             }`}
@@ -1835,7 +1835,7 @@ export default function App() {
                     {isApproved && (
                       <div className="pt-2 flex flex-wrap gap-3 font-sans text-xs">
                         <button
-                          onClick={() => setActiveTab("modules")}
+                          onClick={() => { setActiveTab("modules"); setSelectedLevelExam(null); }}
                           className="bg-[#EBE7DC] hover:bg-[#D1CCBD] text-[#3D3A33] font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow"
                         >
                           Mulai Belajar (Syllabus Lengkap)
@@ -2084,7 +2084,15 @@ export default function App() {
                 {/* Modules core teaching pane */}
                 <div className="lg:col-span-8 bg-white border border-[#E8E4D9] rounded-3xl p-6 shadow-sm min-h-[600px] flex flex-col justify-between font-sans">
                   {selectedLevelExam !== null ? (
-                    renderLevelExamInterface()
+                    <div>
+                      <button
+                        onClick={() => setSelectedLevelExam(null)}
+                        className="mb-4 px-4 py-2 border border-[#D1CCBD] hover:bg-[#F1EEE6] text-[#5A5A40] text-xs font-bold rounded-xl cursor-pointer"
+                      >
+                        ← Kembali ke Silabus
+                      </button>
+                      {renderLevelExamInterface()}
+                    </div>
                   ) : !isModuleNavigable(currentModule) ? (
                     <div className="space-y-8 animate-fade-in text-center py-16 px-4 flex flex-col items-center justify-center my-auto">
                       <div className="w-20 h-20 bg-rose-50 text-rose-500 border border-rose-200 rounded-full flex items-center justify-center shadow-sm">
