@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { englishModules } from "./data/englishModules";
 import { VocabularyNotebook } from "./components/VocabularyNotebook";
+import SpeakingPractice from "./components/SpeakingPractice";
 import { AIAssistant } from "./components/AIAssistant";
 import { FileManager } from "./components/FileManager";
 import { AdminPanel } from "./components/AdminPanel";
@@ -846,6 +847,21 @@ export default function App() {
   };
 
   const currentModule = modules.find(m => m.id === selectedModuleId) || modules[0] || englishModules[0];
+
+  // Text-to-speech: play the correct English pronunciation (browser voice, free).
+  const speakText = (text: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = 0.85;
+    const voices = window.speechSynthesis.getVoices();
+    const voice =
+      voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("en-us")) ||
+      voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("en"));
+    if (voice) u.voice = voice;
+    window.speechSynthesis.speak(u);
+  };
 
   // Quiz calculations
   const handleOptionSelect = (option: string) => {
@@ -2449,7 +2465,17 @@ export default function App() {
                                   <span className="text-[10px] text-slate-500 block">"{ex.phonetic}"</span>
                                   <span className="text-slate-600 block mt-1 text-[11px]">Artinya: {ex.indonesian}</span>
                                 </div>
-                                <span className="text-xl font-bold text-[#5A5A40]">{ex.syriac}</span>
+                                <div className="flex flex-col items-end gap-1 shrink-0">
+                                  <span className="text-xl font-bold text-[#5A5A40]">{ex.syriac}</span>
+                                  <button
+                                    onClick={() => speakText(ex.syriac)}
+                                    className="flex items-center gap-1 px-2 py-1 bg-white hover:bg-[#EBE7DC] text-[#5A5A40] text-[10px] font-bold rounded-lg border border-[#D1CCBD] cursor-pointer transition-colors"
+                                    title="Dengarkan pengucapan"
+                                  >
+                                    <Volume2 className="w-3 h-3" />
+                                    Dengarkan
+                                  </button>
+                                </div>
                               </div>
                             ))}
                           </div>
@@ -2525,12 +2551,37 @@ export default function App() {
                                   </div>
                                   <span className="text-[#8A8471] text-[10px] block mt-0.5">{v.meaning}</span>
                                 </div>
-                                <span className="text-lg font-bold text-[#3D3A33]">{v.syriac}</span>
+                                <div className="flex flex-col items-end gap-1 shrink-0">
+                                  <span className="text-lg font-bold text-[#3D3A33]">{v.syriac}</span>
+                                  <button
+                                    onClick={() => speakText(v.syriac)}
+                                    className="flex items-center gap-1 px-2 py-0.5 bg-[#F1EEE6] hover:bg-[#E8E4D9] text-[#5A5A40] text-[10px] font-bold rounded-lg cursor-pointer transition-colors"
+                                    title="Dengarkan pengucapan"
+                                  >
+                                    <Volume2 className="w-3 h-3" />
+                                    Dengarkan
+                                  </button>
+                                </div>
                               </div>
                             ))}
                           </div>
                         </div>
                       </div>
+
+                      {/* SPEAKING & PRONUNCIATION PRACTICE */}
+                      <SpeakingPractice
+                        moduleTitle={currentModule.title || `Modul ${currentModule.id}`}
+                        items={[
+                          ...(currentModule.examples || []).slice(0, 5).map((ex) => ({
+                            text: ex.syriac,
+                            translation: ex.indonesian,
+                          })),
+                          ...(currentModule.vocabulary || []).slice(0, 4).map((v) => ({
+                            text: v.syriac,
+                            translation: v.meaning,
+                          })),
+                        ]}
+                      />
 
                       {/* ADMIN-POSTED MODULE MATERIALS & DOWNLOADS (PDF, WORD, EXCEL, MP3, MP4) */}
                       <div className="pt-4 border-t border-[#F1EEE6] space-y-3 font-sans">
