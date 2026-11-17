@@ -7,14 +7,17 @@ export const modulesStarter: Module[] = [
     titleSyriac: "The Alphabet & Sounds",
     category: "Starter",
     summary: "Mengenal 26 huruf alfabet bahasa Inggris dari A sampai Z, cara membacanya, dan huruf vokal. Modul ini adalah langkah pertama untuk bisa membaca dan mengeja kata dalam bahasa Inggris.",
-    introduction: "Bahasa Inggris memakai alfabet Latin yang sama seperti bahasa Indonesia, tetapi bunyi dan nama hurufnya berbeda. Ada 26 huruf, dan setiap huruf punya nama sendiri saat dieja.",
-    content: "Alfabet bahasa Inggris terdiri dari 26 huruf: A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z. Lima huruf disebut huruf vokal (vowel): A, E, I, O, U. Sisanya adalah huruf konsonan (consonant). Saat mengeja kata, kita menyebut nama hurufnya, contohnya C-A-T dibaca 'si-ei-ti' dan artinya kucing.",
+    introduction: "Bahasa Inggris memakai alfabet Latin yang sama seperti bahasa Indonesia, tetapi bunyi dan nama hurufnya berbeda. Ada 26 huruf, dan setiap huruf punya nama sendiri saat dieja. Modul ini adalah fondasi pertama: kalau kamu bisa membaca dan mengeja huruf dengan benar, kamu bisa membaca kata apa pun dalam bahasa Inggris.",
+    content: "1. 26 Huruf Alfabet\nBahasa Inggris memakai 26 huruf: A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z.\n\n2. Cara Membaca Setiap Huruf\nSetiap huruf punya nama sendiri. Hafalkan dengan lagu alfabet (Alphabet Song): A dibaca 'ei', B 'bi', C 'si', D 'di', E 'i', F 'ef', G 'ji', H 'eich', I 'ai', J 'jei', K 'kei', L 'el', M 'em', N 'en', O 'oh', P 'pi', Q 'kyu', R 'ar', S 'es', T 'ti', U 'yu', V 'vi', W 'dabel-yu', X 'eks', Y 'wai', Z 'zi' (di Amerika) atau 'zed' (di Inggris).\n\n3. Huruf Vokal dan Konsonan\nLima huruf disebut huruf vokal (vowel): A, E, I, O, U. Semua huruf lain disebut konsonan (consonant) — ada 21 huruf konsonan. Huruf vokal sangat penting karena hampir setiap kata dalam bahasa Inggris mengandung huruf vokal.\n\n4. Cara Mengeja Kata (Spelling)\nSaat mengeja kata, kita menyebut nama hurufnya satu per satu. Contoh: C-A-T dibaca 'si-ei-ti' dan artinya kucing. D-O-G dibaca 'di-oh-ji' dan artinya anjing. B-O-O-K dibaca 'bi-oh-oh-kei' dan artinya buku. Mengeja dipakai saat menyebutkan nama orang, alamat email, atau kata yang sulit di telepon.\n\n5. Huruf Besar (Capital Letters)\nHuruf besar dipakai di awal kalimat dan untuk nama orang, contoh: Budi, Siti, Jakarta. Kata 'I' (saya) selalu ditulis dengan huruf besar, contoh: 'I am Budi.' Nama hari dan bulan juga memakai huruf besar, contoh: Monday, January.\n\n6. Kesalahan yang Sering Terjadi\nH dibaca 'eich', bukan 'ha'. J dibaca 'jei', bukan 'ji'. G dibaca 'ji', bukan 'ge'. E dibaca 'i', bukan 'e'. I dibaca 'ai', bukan 'i'. Perhatikan juga: huruf Y dibaca 'wai', dan huruf Q dibaca 'kyu'.\n\n7. Latihan Mandiri\nCoba eja namamu sendiri huruf demi huruf. Lalu eja lima kata ini: apple, book, school, cat, dog. Ucapkan dengan suara keras — semakin sering diucapkan, semakin cepat hafal.",
     keyRules: [
       "Ada 26 huruf dalam alfabet bahasa Inggris.",
-      "Huruf vokal ada 5: A, E, I, O, U.",
-      "Huruf selain vokal disebut konsonan.",
-      "Nama huruf dibaca saat mengeja, contoh: B dibaca 'bi', C dibaca 'si'.",
-      "Huruf besar (capital) dipakai di awal kalimat dan untuk nama orang."
+      "Huruf vokal ada 5: A, E, I, O, U — sisanya 21 huruf konsonan.",
+      "Setiap huruf punya nama sendiri saat dieja: A 'ei', B 'bi', C 'si'.",
+      "Mengeja = menyebut nama huruf satu per satu, contoh: C-A-T.",
+      "Huruf besar dipakai di awal kalimat, untuk nama orang, dan untuk kata 'I'.",
+      "H dibaca 'eich', J dibaca 'jei', G dibaca 'ji' — jangan tertukar.",
+      "Z dibaca 'zi' di Amerika dan 'zed' di Inggris — keduanya benar.",
+      "Latihan mengeja setiap hari membuat bacaan bahasa Inggris makin lancar."
     ],
     vocabulary: [
       { syriac: "A - apple", translit: "ei - AP-pel", meaning: "Huruf A, contoh: apple (apel)", category: "Alfabet" },
@@ -26,14 +29,33 @@ export const modulesStarter: Module[] = [
       { syriac: "G - grape", translit: "ji - GREIP", meaning: "Huruf G, contoh: grape (anggur)", category: "Alfabet" },
       { syriac: "H - house", translit: "eich - HAUS", meaning: "Huruf H, contoh: house (rumah)", category: "Alfabet" },
       { syriac: "I - ice", translit: "ai - AIS", meaning: "Huruf I, contoh: ice (es)", category: "Alfabet" },
-      { syriac: "J - juice", translit: "jei - JUUS", meaning: "Huruf J, contoh: juice (jus)", category: "Alfabet" }
+      { syriac: "J - juice", translit: "jei - JUUS", meaning: "Huruf J, contoh: juice (jus)", category: "Alfabet" },
+      { syriac: "K - kite", translit: "kei - KAIT", meaning: "Huruf K, contoh: kite (layang-layang)", category: "Alfabet" },
+      { syriac: "L - lion", translit: "el - LAI-en", meaning: "Huruf L, contoh: lion (singa)", category: "Alfabet" },
+      { syriac: "M - moon", translit: "em - MUUN", meaning: "Huruf M, contoh: moon (bulan)", category: "Alfabet" },
+      { syriac: "N - nest", translit: "en - NEST", meaning: "Huruf N, contoh: nest (sarang)", category: "Alfabet" },
+      { syriac: "O - orange", translit: "oh - O-rinj", meaning: "Huruf O, contoh: orange (jeruk)", category: "Alfabet" },
+      { syriac: "P - pen", translit: "pi - PEN", meaning: "Huruf P, contoh: pen (pulpen)", category: "Alfabet" },
+      { syriac: "Q - queen", translit: "kyu - KWIIN", meaning: "Huruf Q, contoh: queen (ratu)", category: "Alfabet" },
+      { syriac: "R - rabbit", translit: "ar - RE-bit", meaning: "Huruf R, contoh: rabbit (kelinci)", category: "Alfabet" },
+      { syriac: "S - sun", translit: "es - SAN", meaning: "Huruf S, contoh: sun (matahari)", category: "Alfabet" },
+      { syriac: "T - tiger", translit: "ti - TAI-ger", meaning: "Huruf T, contoh: tiger (harimau)", category: "Alfabet" },
+      { syriac: "U - umbrella", translit: "yu - am-BRE-la", meaning: "Huruf U, contoh: umbrella (payung)", category: "Alfabet" },
+      { syriac: "V - violin", translit: "vi - vai-o-LIN", meaning: "Huruf V, contoh: violin (biola)", category: "Alfabet" },
+      { syriac: "W - water", translit: "dabel-yu - WO-ter", meaning: "Huruf W, contoh: water (air)", category: "Alfabet" },
+      { syriac: "X - box", translit: "eks - BOKS", meaning: "Huruf X, contoh: box (kotak)", category: "Alfabet" },
+      { syriac: "Y - yoyo", translit: "wai - YO-yo", meaning: "Huruf Y, contoh: yoyo (yoyo)", category: "Alfabet" },
+      { syriac: "Z - zebra", translit: "zi - ZII-bra", meaning: "Huruf Z, contoh: zebra (zebra)", category: "Alfabet" }
     ],
     examples: [
       { syriac: "A, B, C, D, E.", translit: "ei, bi, si, di, i", indonesian: "Lima huruf pertama alfabet." },
       { syriac: "C-A-T spells cat.", translit: "si-ei-ti spelz KAT", indonesian: "C-A-T mengeja kata cat (kucing)." },
       { syriac: "D-O-G spells dog.", translit: "di-oh-ji spelz DOG", indonesian: "D-O-G mengeja kata dog (anjing)." },
       { syriac: "A, E, I, O, U are vowels.", translit: "ei, i, ai, oh, yu ar VAU-elz", indonesian: "A, E, I, O, U adalah huruf vokal." },
-      { syriac: "B is for book.", translit: "bi iz for BUK", indonesian: "B untuk book (buku)." }
+      { syriac: "B is for book.", translit: "bi iz for BUK", indonesian: "B untuk book (buku)." },
+      { syriac: "S-C-H-O-O-L spells school.", translit: "es-si-eich-oh-oh-el spelz SKUUL", indonesian: "S-C-H-O-O-L mengeja kata school (sekolah)." },
+      { syriac: "My name is Ana. A-N-A spells Ana.", translit: "mai NEIM iz A-na. ei-en-ei spelz A-na", indonesian: "Nama saya Ana. A-N-A mengeja Ana." },
+      { syriac: "I am a student.", translit: "ai am a STYU-dent", indonesian: "Saya seorang siswa. Perhatikan: I selalu huruf besar." }
     ],
     quizzes: [
       {

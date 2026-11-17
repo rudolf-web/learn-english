@@ -222,12 +222,9 @@ export default function App() {
   const [isLevelExamAnswered, setIsLevelExamAnswered] = useState(false);
   const [levelExamScore, setLevelExamScore] = useState(0);
   const [levelExamResult, setLevelExamResult] = useState<{ score: number; passed: boolean; scorePercent: number } | null>(null);
+  // Certificate Modal States (level graduation only — no per-module certificates)
   const [levelCertificateOpen, setLevelCertificateOpen] = useState(false);
   const [levelCertificateToOpen, setLevelCertificateToOpen] = useState<"Starter" | "A1" | "A2" | "B1" | "B2" | null>(null);
-
-  // Certificate Modal States
-  const [isCertificateOpen, setIsCertificateOpen] = useState(false);
-  const [certificateModule, setCertificateModule] = useState<Module | null>(null);
 
   const isLevelUnlocked = (lvl: "Starter" | "A1" | "A2" | "B1" | "B2") => {
     const isUserAdmin = userProfile?.role === "admin";
@@ -973,6 +970,47 @@ export default function App() {
       });
       setIsLevelExamActive(false);
     }
+  };
+
+  // Next-step button after finishing a module: the next module, or the
+  // level exam when the next module sits behind a level gate. Certificates
+  // are only given at the end of a level, never per module.
+  const renderNextStepButton = (className: string, forceCompleted = false) => {
+    if (!forceCompleted && !progress.completedModules.includes(currentModule.id)) return null;
+    const sorted = [...modules].sort((a, b) => a.id - b.id);
+    const idx = sorted.findIndex(m => m.id === currentModule.id);
+    const next = sorted[idx + 1];
+    const goToExam = (lvl: "Starter" | "A1" | "A2" | "B1" | "B2") => {
+      setSelectedLevelExam(lvl);
+      setIsQuizMode(false);
+      setQuizResult(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    if (!next) {
+      const lvl = currentModule.category === "Starter" ? "Starter" : currentModule.category === "Level A1" ? "A1" : currentModule.category === "Level A2" ? "A2" : currentModule.category === "Level B1" ? "B1" : "B2";
+      return (
+        <button onClick={() => goToExam(lvl as any)} className={className}>
+          Buka Ujian {lvl} →
+        </button>
+      );
+    }
+    if (isModuleNavigable(next)) {
+      return (
+        <button
+          onClick={() => { setSelectedModuleId(next.id); setIsQuizMode(false); setQuizResult(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+          className={className}
+        >
+          Lanjut ke Modul {next.id} →
+        </button>
+      );
+    }
+    const examLevel = next.category === "Level A1" ? "Starter" : next.category === "Level A2" ? "A1" : next.category === "Level B1" ? "A2" : next.category === "Level B2" ? "B1" : null;
+    if (!examLevel) return null;
+    return (
+      <button onClick={() => goToExam(examLevel as any)} className={className}>
+        Buka Ujian {examLevel} →
+      </button>
+    );
   };
 
   const renderLevelExamInterface = () => {
@@ -2885,25 +2923,7 @@ export default function App() {
                           </div>
                           
                           <div className="flex gap-2.5 flex-wrap justify-center sm:justify-end">
-                            {(() => {
-                              if (!progress.completedModules.includes(currentModule.id)) return false;
-                              const highScore = progress.quizHighScores[currentModule.id] || 0;
-                              const totalQuestions = currentModule.quizzes?.length || 1;
-                              const scorePercent = Math.round((highScore / totalQuestions) * 100);
-                              return scorePercent >= 70;
-                            })() && (
-                              <button
-                                onClick={() => {
-                                  setCertificateModule(currentModule);
-                                  setIsCertificateOpen(true);
-                                }}
-                                className="bg-amber-500 hover:bg-amber-600 border border-amber-600 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow transition-all cursor-pointer flex items-center gap-1.5"
-                              >
-                                <Award className="w-4 h-4 text-white" />
-                                Cetak E-Sertifikat
-                              </button>
-                            )}
-                            
+                            {renderNextStepButton("bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer")}
                             <button
                               onClick={() => {
                                 setIsQuizMode(true);
@@ -2917,35 +2937,6 @@ export default function App() {
                             >
                               {progress.completedModules.includes(currentModule.id) ? "Ulangi Kuis Modul" : `Buka Kuis Modul (${currentModule.quizzes?.length || 1} Soal)`}
                             </button>
-
-                            {/* Next-module shortcut: after finishing a module, go straight on */}
-                            {(() => {
-                              if (!progress.completedModules.includes(currentModule.id)) return null;
-                              const sorted = [...modules].sort((a, b) => a.id - b.id);
-                              const idx = sorted.findIndex(m => m.id === currentModule.id);
-                              const next = sorted[idx + 1];
-                              if (!next) return null;
-                              if (isModuleNavigable(next)) {
-                                return (
-                                  <button
-                                    onClick={() => { setSelectedModuleId(next.id); setIsQuizMode(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
-                                  >
-                                    Lanjut ke Modul {next.id} →
-                                  </button>
-                                );
-                              }
-                              const examLevel = next.category === "Level A1" ? "Starter" : next.category === "Level A2" ? "A1" : next.category === "Level B1" ? "A2" : next.category === "Level B2" ? "B1" : null;
-                              if (!examLevel) return null;
-                              return (
-                                <button
-                                  onClick={() => { setSelectedLevelExam(examLevel as any); setIsQuizMode(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
-                                >
-                                  Buka Ujian {examLevel} →
-                                </button>
-                              );
-                            })()}
                           </div>
                         </div>
                       )}
@@ -3020,16 +3011,7 @@ export default function App() {
                               })();
                               return passedCurrent || passedPreviously;
                             })() ? (
-                              <button
-                                onClick={() => {
-                                  setCertificateModule(currentModule);
-                                  setIsCertificateOpen(true);
-                                }}
-                                className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 font-bold text-white text-xs px-5 py-2.5 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-1.5"
-                              >
-                                <Award className="w-4 h-4" />
-                                Cetak E-Sertifikat
-                              </button>
+                              renderNextStepButton("w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 font-bold text-white text-xs px-5 py-2.5 rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-1.5", true)
                             ) : (
                               <button
                                 onClick={() => {
@@ -3211,14 +3193,14 @@ export default function App() {
         </div>
       </footer>
 
-      {certificateModule && (
+      {levelCertificateOpen && levelCertificateToOpen && (
         <CertificateModal
-          isOpen={isCertificateOpen}
+          isOpen={levelCertificateOpen}
           onClose={() => {
-            setIsCertificateOpen(false);
-            setCertificateModule(null);
+            setLevelCertificateOpen(false);
+            setLevelCertificateToOpen(null);
           }}
-          module={certificateModule}
+          level={levelCertificateToOpen}
           userFullName={userProfile?.fullName || "Siswa"}
         />
       )}
