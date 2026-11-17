@@ -2917,6 +2917,35 @@ export default function App() {
                             >
                               {progress.completedModules.includes(currentModule.id) ? "Ulangi Kuis Modul" : `Buka Kuis Modul (${currentModule.quizzes?.length || 1} Soal)`}
                             </button>
+
+                            {/* Next-module shortcut: after finishing a module, go straight on */}
+                            {(() => {
+                              if (!progress.completedModules.includes(currentModule.id)) return null;
+                              const sorted = [...modules].sort((a, b) => a.id - b.id);
+                              const idx = sorted.findIndex(m => m.id === currentModule.id);
+                              const next = sorted[idx + 1];
+                              if (!next) return null;
+                              if (isModuleNavigable(next)) {
+                                return (
+                                  <button
+                                    onClick={() => { setSelectedModuleId(next.id); setIsQuizMode(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
+                                  >
+                                    Lanjut ke Modul {next.id} →
+                                  </button>
+                                );
+                              }
+                              const examLevel = next.category === "Level A1" ? "Starter" : next.category === "Level A2" ? "A1" : next.category === "Level B1" ? "A2" : next.category === "Level B2" ? "B1" : null;
+                              if (!examLevel) return null;
+                              return (
+                                <button
+                                  onClick={() => { setSelectedLevelExam(examLevel as any); setIsQuizMode(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
+                                >
+                                  Buka Ujian {examLevel} →
+                                </button>
+                              );
+                            })()}
                           </div>
                         </div>
                       )}
