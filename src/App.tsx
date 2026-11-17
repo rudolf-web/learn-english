@@ -391,16 +391,27 @@ export default function App() {
                   profileData.role = "admin";
                   profileData.status = "APPROVED";
                 }
+
+                // Google sign-in is auto-approved (verified Google identity):
+                // upgrade an older PENDING profile created by a Google login.
+                const signedInWithGoogleHere = (currentUser.providerData || []).some((p: any) => p.providerId === "google.com");
+                if (signedInWithGoogleHere && profileData.status === "PENDING") {
+                  profileData.status = "APPROVED";
+                  setDoc(userRef, { status: "APPROVED" }, { merge: true });
+                }
                 setUserProfile(profileData);
               } else {
                 // Create dynamic profile if doesn't exist
                 const isAdminEmail = currentUser.email?.toLowerCase() === "rudolfluhukay69@guru.smp.belajar.id";
+                // Google sign-in is auto-approved (verified Google identity);
+                // only email/password signups start as PENDING for admin review.
+                const signedInWithGoogle = (currentUser.providerData || []).some((p: any) => p.providerId === "google.com");
                 const newProfile = {
                   userId: currentUser.uid,
                   email: currentUser.email?.toLowerCase() || "",
                   fullName: currentUser.displayName || "Siswa",
                   role: isAdminEmail ? "admin" : "student",
-                  status: isAdminEmail ? "APPROVED" : "PENDING",
+                  status: (isAdminEmail || signedInWithGoogle) ? "APPROVED" : "PENDING",
                   learningReason: "Belajar sastra semitik kuno.",
                   activeSessionId: appSessionId,
                   createdAt: new Date().toISOString()
