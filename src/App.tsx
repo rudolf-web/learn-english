@@ -538,34 +538,28 @@ export default function App() {
         try {
           const querySnapshot = await getDocs(collection(db, "modules_en"));
           const modsList: Module[] = [];
-          
+
           querySnapshot.forEach((doc) => {
             modsList.push(doc.data() as Module);
           });
 
-          if (modsList.length === 0) {
-            // Seed modules securely to Firestore
-            console.log("Seeding course modules into cloud...");
-            for (const m of englishModules) {
-              await setDoc(doc(db, "modules_en", String(m.id)), m);
+          // The bundled modules are the source of truth for the catalogue:
+          // overlay cloud versions (admin edits) on top, but never let a
+          // partial cloud list hide modules from students.
+          const cloudById = new Map(modsList.map(m => [m.id, m]));
+          const merged: Module[] = englishModules.map(b => cloudById.get(b.id) || b);
+          for (const m of modsList) {
+            if (!merged.some(x => x.id === m.id)) merged.push(m);
+          }
+          merged.sort((a, b) => a.id - b.id);
+          setModules(merged);
+
+          // Best-effort background sync of any missing bundled modules
+          // to the cloud (admin edits stay intact; failures are ignored).
+          for (const m of englishModules) {
+            if (!cloudById.has(m.id)) {
+              setDoc(doc(db, "modules_en", String(m.id)), m).catch(() => {});
             }
-            // Sort, assign
-            const copy = [...englishModules];
-            copy.sort((a, b) => a.id - b.id);
-            setModules(copy);
-          } else {
-            // If the database has fewer modules than standard englishModules, let's sync and add the missing ones
-            if (modsList.length < englishModules.length) {
-              console.log("Syncing missing course modules to cloud...");
-              const existingIds = new Set(modsList.map(m => m.id));
-              const missingModules = englishModules.filter(m => !existingIds.has(m.id));
-              for (const m of missingModules) {
-                await setDoc(doc(db, "modules_en", String(m.id)), m);
-                modsList.push(m);
-              }
-            }
-            modsList.sort((a, b) => a.id - b.id);
-            setModules(modsList);
           }
         } catch (err) {
           console.error("Gagal melacak database modul cloud:", err);
